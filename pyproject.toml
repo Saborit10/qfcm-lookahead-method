@@ -1,0 +1,75 @@
+[project]
+name = "my-thesis"
+version = "0.1.0"
+description = "Master thesis: interval and symbolic state-space bounding methods for recurrent neural reasoning."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10",
+    "numpy>=2.3",
+    "pandas>=2.3",
+    "seaborn>=0.13",
+    "torch>=2.9",
+    "tqdm>=4.67",
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "ipykernel>=6.29",
+    "jupyter_client>=8.6",
+    "jupyterlab>=4.4",
+    "nbclient>=0.10",
+    "nbformat>=5.10",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.3",
+    "mypy>=1.19",
+    "nbstripout>=0.8",
+    "pytest>=8.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["core", "experimental", "luis"]
+
+# rfc3987-syntax builds ~40 lark parsers on import (~5s), which blows the
+# 4s dependency-probe timeout of the opencode-ipynb plugin. jsonschema
+# imports it under `suppress(ImportError)` for IRI format checking only, so
+# excluding it is safe (upstream fix exists only in the unmaintained fork's
+# renamed module rfc3987_syntax2, which jsonschema never imports).
+[tool.uv]
+exclude-dependencies = ["rfc3987-syntax"]
+
+# --- PyTorch build ---
+# Default: the PyPI wheel, which on Linux bundles the CUDA build (torch>=2.9
+# ships CUDA 12.x kernels + CPU fallback, so it works on both GPU and CPU
+# machines). On a CUDA machine the code auto-uses the GPU via
+# `core.get_default_device()`; a NVIDIA driver is the only external requirement.
+#
+# If you want the CPU-only ~200 MB wheel instead (e.g. no GPU), uncomment:
+#
+#   [[tool.uv.index]]
+#   name = "pytorch-cpu"
+#   url = "https://download.pytorch.org/whl/cpu"
+#   explicit = true
+#
+#   [tool.uv.sources]
+#   torch = { index = "pytorch-cpu" }
+#
+# On Windows, the PyPI wheel is CPU-only; to get CUDA there use the official
+# index instead, e.g. torch = { index = "pytorch-cu126" } with
+# url = "https://download.pytorch.org/whl/cu126".
+
+# Typical workflow:
+#   uv sync                        # create .venv + install runtime + dev group
+#   uv sync --extra notebooks      # add JupyterLab
+#   uv run jupyter lab             # open the notebooks

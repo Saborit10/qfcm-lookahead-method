@@ -1,0 +1,40 @@
+**/__pycache__/
+*.pyc
+*.csv
+
+# IDE settings
+.idea/
+.vscode/
+
+# Generated media files
+media/*.png
+luis/assets/*.png
+*.pdf
+
+# LibreOffice / editor lock files
+*.~lock.*#
+
+# Virtual envs and caches
+.venv/
+.mypy_cache/
+.atl/
+.pytest_cache/
+
+# Local tool config
+.lsp.json
+.qwenignore
+
+# Local secrets / environment
+.env
+
+# CodeGraph index (local, machine-specific)
+.codegraph/
+
+# Large local data (kept on disk, out of git)
+maps.json
+maps*.json
+luis/debug.txt
+estados/
+
+*.md
+opencode.json
