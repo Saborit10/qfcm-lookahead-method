@@ -202,28 +202,6 @@ def series_intersection(state1: torch.Tensor, state2: torch.Tensor) -> torch.Ten
     )
 
 
-def state_intersection(state1: torch.Tensor, state2: torch.Tensor) -> torch.Tensor:
-    """
-    Calcula la intersección de dos estados.
-
-    Args:
-        state1: Tensor de forma (2, n_concepts).
-        state2: Tensor de forma (2, n_concepts).
-
-    Returns:
-        torch.Tensor: Intersección de llos estados con redondeo direccional.
-    """
-    from core.utils import downwards_rounding, upwards_rounding
-
-    return torch.stack(
-        [
-            downwards_rounding(torch.maximum(state1[0, :], state2[0, :])),
-            upwards_rounding(torch.minimum(state1[1, :], state2[1, :])),
-        ],
-        dim=-2,
-    )
-
-
 def margin(state_series_1: torch.Tensor, state_series_2: torch.Tensor) -> float:
     """
     Calcula el margen mínimo entre dos series de estados.

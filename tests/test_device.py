@@ -10,7 +10,7 @@ import pytest
 import torch
 
 from core.methods import interval_state_space, symbolic_state_space
-from experimental.methods import lookahead_refined_state_space, lookahead_state_space
+from experimental.methods import lookahead_state_space
 
 
 def _inputs(n_concepts: int, device: torch.device) -> torch.Tensor:
@@ -20,9 +20,7 @@ def _inputs(n_concepts: int, device: torch.device) -> torch.Tensor:
 
 
 class TestMethodsFollowInputDevice:
-    @pytest.mark.parametrize(
-        "method", ["arithmetic", "symbolic", "lookahead", "lookahead_refined"]
-    )
+    @pytest.mark.parametrize("method", ["arithmetic", "symbolic", "lookahead"])
     def test_cpu_inputs_without_device(self, method):
         torch.manual_seed(0)
         W = torch.rand(6, 6, device="cpu")
@@ -32,12 +30,8 @@ class TestMethodsFollowInputDevice:
             series = interval_state_space(W, inputs, "sigmoid", 1.0, max_iters=3)
         elif method == "symbolic":
             series = symbolic_state_space(W, inputs, "sigmoid", 1.0, max_iters=3)
-        elif method == "lookahead":
-            series = lookahead_state_space(
-                W, inputs, "sigmoid", 1.0, k=2, max_iters=3
-            )
         else:
-            series = lookahead_refined_state_space(
+            series = lookahead_state_space(
                 W, inputs, "sigmoid", 1.0, k=2, max_iters=3
             )
 
@@ -63,7 +57,6 @@ class TestMethodsFollowInputDevice:
             interval_state_space,
             symbolic_state_space,
             lookahead_state_space,
-            lookahead_refined_state_space,
         ):
             kwargs = {"W": W, "inputs": inputs, "activation_function": "sigmoid",
                       "phi": 1.0, "max_iters": 3}

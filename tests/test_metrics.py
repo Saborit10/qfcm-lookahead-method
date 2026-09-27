@@ -15,7 +15,6 @@ from core.metrics import (
     series_intersection,
     series_is_nested,
     series_is_strictly_contracting,
-    state_intersection,
     state_series_from_samples,
     states_intersection,
 )
@@ -136,13 +135,6 @@ class TestIntersections:
         s2 = torch.tensor([[0.0, 0.25], [0.5, 0.75]])
         inter = states_intersection(s1, s2)
         assert inter.shape == (2, 2)
-        assert torch.all(inter[0] <= torch.maximum(s1[0], s2[0]))
-        assert torch.all(inter[1] >= torch.minimum(s1[1], s2[1]))
-
-    def test_state_intersection(self):
-        s1 = torch.tensor([[0.25, -1.0], [0.75, 1.0]])
-        s2 = torch.tensor([[0.0, 0.25], [0.5, 0.75]])
-        inter = state_intersection(s1, s2)
         assert torch.all(inter[0] <= torch.maximum(s1[0], s2[0]))
         assert torch.all(inter[1] >= torch.minimum(s1[1], s2[1]))
 
