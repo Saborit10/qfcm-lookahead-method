@@ -8,14 +8,16 @@
 
 # Generated media files
 media/*.png
-luis/assets/*.png
 *.pdf
 
 # LibreOffice / editor lock files
 *.~lock.*#
 
 # Virtual envs and caches
-.venv/
+# Sin barra final a proposito: git trata un symlink como fichero, no como
+# directorio, asi que `.venv/` no lo cubre. Sin la barra se ignoran ambos.
+.venv
+venv
 .mypy_cache/
 .atl/
 .pytest_cache/
@@ -33,7 +35,6 @@ luis/assets/*.png
 # Large local data (kept on disk, out of git)
 maps.json
 maps*.json
-luis/debug.txt
 estados/
 
 *.md
